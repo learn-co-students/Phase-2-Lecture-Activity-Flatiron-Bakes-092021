@@ -1,9 +1,11 @@
-function CakeCard(props){
+function CakeCard({cakeObj:{flavor,size = '6" cake',price}}){
     return(
         <>
-            <h1>Flavor: {props.flavor}</h1>
-            <p>Price: {props.price}</p>
+            <h1>Flavor: {flavor}</h1>
+            <p>Size:{size}</p>
+            <p>Price: {price}</p>
         </>
     )
 }
 export default CakeCard
+

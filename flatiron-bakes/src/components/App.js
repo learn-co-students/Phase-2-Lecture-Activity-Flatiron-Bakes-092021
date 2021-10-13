@@ -1,12 +1,21 @@
-import CakeCard from "./CakeCard";
+//Components
+import CakeContainer from "./CakeContainer";
+import Header from "./Header";
+import Search from "./Search";
+
+//data
+import {cakes} from "../data/cakesData"
+
 function App() {
+  
   return (
     <div className="App">
-      <CakeCard flavor={"Carrot and Walnut"} price={20} />
-      <CakeCard flavor={"Chocolate"} price={25} />
-      <CakeCard flavor={"Vanilla"} price={28} />
+      <Header bakeryName="FlatironBakes" slogan="live love code bake repeat"/>
+      <Search />
+      <CakeContainer cakeList={cakes}/>
+
     </div>
   );
-}
+};
 
 export default App;
