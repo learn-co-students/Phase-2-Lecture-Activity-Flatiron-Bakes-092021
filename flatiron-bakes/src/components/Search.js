@@ -1,6 +1,6 @@
-function Search(){
+function Search({search, handleSearch}){
     return(
-        <div>Search</div>
+        <input onChange={handleSearch} type="text" value={search}></input>
     )
 }
 
