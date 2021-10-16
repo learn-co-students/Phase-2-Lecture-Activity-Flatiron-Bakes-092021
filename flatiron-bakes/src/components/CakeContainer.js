@@ -1,9 +1,9 @@
 import CakeCard from "./CakeCard";
 
-function CakeContainer(props){
+function CakeContainer({cakeList, handleCakeClick}){
     return(
         <>
-        {props.cakeList.map(cake => <CakeCard key={cake.flavor} cakeObj={cake}/>)}
+        {cakeList.map(cake => <CakeCard key={cake.flavor} handleCakeClick={handleCakeClick} cakeObj={cake}/>)}
         </>
     )
 }

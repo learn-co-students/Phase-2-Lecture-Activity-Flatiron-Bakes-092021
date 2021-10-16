@@ -5,4 +5,3 @@ function Search({search, handleSearch}){
 }
 
 export default Search
-
