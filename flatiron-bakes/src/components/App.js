@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 //Components
 import CakeContainer from "./CakeContainer";
 import Header from "./Header";
@@ -8,11 +8,15 @@ import Flavors from './Flavors';
 import Form from './Form'
 
 //data
-import {cakes, flavorsData} from "../data/cakesData"
 
 
 function App() {
-  const [cakeList, setCakeList] = useState(cakes)
+  const [cakes, setCakes] = useState([])
+  const [flavorsData, setFlavorsData] = useState([])
+  
+  const [visible, setVisible]  = useState(true)
+
+  const [cakeList, setCakeList] = useState([])
   const [selectedCake, setSelectedCake] = useState(null)
   const [search, setSearch] = useState('')
   const [editing, setEditing] = useState(null)
@@ -23,6 +27,23 @@ function App() {
     price:''
 })
 
+
+useEffect(() => {
+  fetch("http://localhost:4000/cakes")
+  .then(res => res.json())
+  .then(data => {
+    setCakes(data)
+    setCakeList(data)
+  })
+  fetch("http://localhost:4000/flavorsData")
+  .then(res => res.json())
+  .then(data => setFlavorsData(data))
+},[])
+
+useEffect(() => {
+  console.log(formData)
+},[formData])
+
 const handleChange = (e) => {
     console.log(e.target.name)
     console.log(e.target.value)
@@ -32,6 +53,10 @@ const handleChange = (e) => {
   const handleAddCake = (e) => {
     e.preventDefault()
     setCakeList([formData, ...cakeList])
+    setFormData({   flavor:'',
+    size:'',
+    image:'',
+    price:''})
   }
 
   const handleSearch = (e) => {
@@ -74,7 +99,8 @@ const handleChange = (e) => {
       <Header bakeryName="FlatironBakes" slogan="live love code bake repeat"/>
       {selectedCake?<CakeDetail selectedCake={selectedCake} />:null}
 
-      <Form  handleForm={editing ? handleEdit : handleAddCake} formData={formData} handleChange={handleChange}/>
+      <button onClick={() => setVisible(!visible)}>{visible?"Hide Form": "Show Form"}</button>
+      {visible?<Form  handleForm={editing ? handleEdit : handleAddCake} formData={formData} handleChange={handleChange}/>:null}
 
       <Search search={search} handleSearch={handleSearch}/>
       <Flavors handleFilter={handleFilter} flavorsData={flavorsData}/>

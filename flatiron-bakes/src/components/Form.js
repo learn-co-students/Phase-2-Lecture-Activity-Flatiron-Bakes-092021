@@ -1,8 +1,12 @@
-import {useState} from 'react'
+import {useEffect} from 'react'
 
 function Form({handleChange, handleForm, formData}){
   
+    useEffect(() => {
+        return () => console.log('form removed')
+    },[])
 
+    
     return(
         <>
             <form onSubmit={handleForm} style={{display:"flex", flexDirection:"column"}}>
