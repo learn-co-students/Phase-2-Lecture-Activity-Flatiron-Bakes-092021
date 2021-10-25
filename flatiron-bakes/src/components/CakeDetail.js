@@ -1,4 +1,4 @@
-function CakeDetail({selectedCake:{flavor,size = '6" cake',price, image,description}}){   
+function CakeDetail({handleDelete, selectedCake, selectedCake:{flavor,size = '6" cake',price, image,description}}){   
     return(
             <>
                 <img src={image} />
@@ -6,6 +6,7 @@ function CakeDetail({selectedCake:{flavor,size = '6" cake',price, image,descript
                 <p>Size:{size}</p>
                 <p>Price: {price}</p>
                 <p>{description}</p>
+                <button onClick={() => handleDelete(selectedCake)}>Delete</button>
             </>
         )
     }

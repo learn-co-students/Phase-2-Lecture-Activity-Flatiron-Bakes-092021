@@ -13,9 +13,7 @@ import Form from './Form'
 function App() {
   const [cakes, setCakes] = useState([])
   const [flavorsData, setFlavorsData] = useState([])
-  
   const [visible, setVisible]  = useState(true)
-
   const [cakeList, setCakeList] = useState([])
   const [selectedCake, setSelectedCake] = useState(null)
   const [search, setSearch] = useState('')
@@ -52,11 +50,33 @@ const handleChange = (e) => {
 
   const handleAddCake = (e) => {
     e.preventDefault()
-    setCakeList([formData, ...cakeList])
-    setFormData({   flavor:'',
-    size:'',
-    image:'',
-    price:''})
+    fetch('http://localhost:4000/cakes',{
+      method:'POST',
+      headers: {
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(res => res.json())
+    .then(data => {
+      setCakeList([data, ...cakeList])
+      setFormData({   flavor:'',
+      size:'',
+      image:'',
+      price:''})
+    })
+  }
+
+  const handleDelete = (deletedCake) => {
+    fetch(`http://localhost:4000/cakes/${deletedCake.id}`,{
+      method:'DELETE'
+    })
+    .then(() => {
+      const filteredCakes = cakes.filter(cake => cake.id !== deletedCake.id)
+      setCakes(filteredCakes)
+      setCakeList(filteredCakes)
+      setSelectedCake(null)
+    })
   }
 
   const handleSearch = (e) => {
@@ -92,12 +112,14 @@ const handleChange = (e) => {
     //change the submit to an edit 
     setEditing(cake)
   }
+
+
   
   return (
   
     <div className="App">
       <Header bakeryName="FlatironBakes" slogan="live love code bake repeat"/>
-      {selectedCake?<CakeDetail selectedCake={selectedCake} />:null}
+      {selectedCake?<CakeDetail handleDelete={handleDelete} selectedCake={selectedCake} />:null}
 
       <button onClick={() => setVisible(!visible)}>{visible?"Hide Form": "Show Form"}</button>
       {visible?<Form  handleForm={editing ? handleEdit : handleAddCake} formData={formData} handleChange={handleChange}/>:null}
