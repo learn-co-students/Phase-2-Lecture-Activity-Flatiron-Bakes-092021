@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react'
+import {Route, Switch} from 'react-router-dom'
 //Components
 import CakeContainer from "./CakeContainer";
 import Header from "./Header";
@@ -13,9 +14,7 @@ import Form from './Form'
 function App() {
   const [cakes, setCakes] = useState([])
   const [flavorsData, setFlavorsData] = useState([])
-  const [visible, setVisible]  = useState(true)
   const [cakeList, setCakeList] = useState([])
-  const [selectedCake, setSelectedCake] = useState(null)
   const [search, setSearch] = useState('')
   const [editing, setEditing] = useState(null)
   const [formData, setFormData] = useState({
@@ -75,7 +74,7 @@ const handleChange = (e) => {
       const filteredCakes = cakes.filter(cake => cake.id !== deletedCake.id)
       setCakes(filteredCakes)
       setCakeList(filteredCakes)
-      setSelectedCake(null)
+    
     })
   }
 
@@ -84,9 +83,6 @@ const handleChange = (e) => {
     setCakeList(cakes.filter(cake => cake.flavor.includes(e.target.value)))
   }
 
-  const handleCakeClick = (cake) => {
-    setSelectedCake(cake)
-  }
 
   const handleFilter = (flavor) => {
     setCakeList(cakes.filter(cake => cake.flavor === flavor))
@@ -116,17 +112,22 @@ const handleChange = (e) => {
 
   
   return (
-  
+
     <div className="App">
-      <Header bakeryName="FlatironBakes" slogan="live love code bake repeat"/>
-      {selectedCake?<CakeDetail handleDelete={handleDelete} selectedCake={selectedCake} />:null}
-
-      <button onClick={() => setVisible(!visible)}>{visible?"Hide Form": "Show Form"}</button>
-      {visible?<Form  handleForm={editing ? handleEdit : handleAddCake} formData={formData} handleChange={handleChange}/>:null}
-
-      <Search search={search} handleSearch={handleSearch}/>
-      <Flavors handleFilter={handleFilter} flavorsData={flavorsData}/>
-      <CakeContainer populateForm={populateForm} cakeList={cakeList} handleCakeClick={handleCakeClick}/>
+    <Header bakeryName="FlatironBakes" slogan="live love code bake repeat"/>
+    <Switch>
+      <Route path="/cakes/new">
+        <Form  handleForm={editing ? handleEdit : handleAddCake} formData={formData} handleChange={handleChange}/>
+      </Route>
+      <Route path="/cakes/:id">
+        <CakeDetail handleDelete={handleDelete}/>
+      </Route>
+      <Route path="/cakes">
+          <Search search={search} handleSearch={handleSearch}/>
+          <Flavors handleFilter={handleFilter} flavorsData={flavorsData}/>
+          <CakeContainer populateForm={populateForm} cakeList={cakeList} />
+      </Route>
+    </Switch>
     </div>
   );
 };
