@@ -10,7 +10,6 @@ import Form from './Form'
 
 //data
 
-
 function App() {
   const [cakes, setCakes] = useState([])
   const [flavorsData, setFlavorsData] = useState([])

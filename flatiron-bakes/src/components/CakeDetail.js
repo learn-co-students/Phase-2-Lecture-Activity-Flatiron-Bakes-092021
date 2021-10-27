@@ -1,24 +1,10 @@
-import {useState, useEffect} from 'react'
 import {useParams} from 'react-router-dom'
+import useQuery from '../hooks/useQuery';
 
-function CakeDetail({handleDelete}){   
-    const [cake, setCake] = useState(null);
-    const [isLoaded, setIsLoaded] = useState(false);
+function CakeDetail({handleDelete}){ 
+    const id = useParams().id  
+    const [cake, isLoaded] = useQuery(`http://localhost:4000/cakes/${id}`)
 
-    const id = useParams().id
-
-    useEffect(()=> {
-        console.log('hi')
-        console.log(id)
-        fetch(`http://localhost:4000/cakes/${id}`)
-        .then(res => res.json())
-        .then(data => {
-            console.log(data)
-            setCake(data)
-            setIsLoaded(true)
-        });
-    },[]);
-   
     if(!isLoaded) return <h1>Loading</h1>
     const {image, flavor, size, price, description} = cake
     return(
